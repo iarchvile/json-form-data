@@ -129,7 +129,7 @@
 
                 } else if (((value === null && options.includeNullValues) || value !== null) && value !== undefined) {
 
-                    formData.append(propName, value);
+                    formData.append(propName, (value === null || false) ? '' : value);
                 }
             }
             index++;
