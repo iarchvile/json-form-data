@@ -49,6 +49,7 @@
             initialFormData: getDefaultFormData(),
             showLeafArrayIndexes: true,
             includeNullValues: false,
+            put: false,
             mapping: function(value) {
                 if (typeof value === "boolean") {
                     return +value ? "1" : "0";
@@ -57,6 +58,11 @@
             }
         };
         var mergedOptions = mergeObjects(defaultOptions, options || {});
+        if (mergedOptions.put) {
+            jsonObject = Object.assign({
+                _method: "put"
+            }, jsonObject);
+        }
         return convertRecursively(jsonObject, mergedOptions, mergedOptions.initialFormData);
     }
     function convertRecursively(jsonObject, options, formData, parentKey) {
@@ -86,7 +92,7 @@
                 } else if (value instanceof Date) {
                     formData.append(propName, value.toISOString());
                 } else if ((value === null && options.includeNullValues || value !== null) && value !== undefined) {
-                    formData.append(propName, value);
+                    formData.append(propName, value === null || false ? "" : value);
                 }
             }
             index++;
